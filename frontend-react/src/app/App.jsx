@@ -1,7 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import ProductList from '../features/products/ProductList';
-import RawMaterialList from '../features/rawMaterial/RawMaterialList';
+import RawMaterialList from '../features/rawMaterials/RawMaterialList';
+import SuggestionList from '../features/suggestions/SuggestionlList';
 
 // Componentes simplões como você pediu
 const Header = () => (
@@ -35,7 +36,7 @@ function App() {
           <Routes>
             <Route path="/" element={<ProductList />} />
             <Route path="/materials" element={<RawMaterialList />} />
-            <Route path="/suggestion" element={<div className="p-4">Suggestions</div>} />
+            <Route path="/suggestion" element={<SuggestionList />} />
             <Route path="*" element={<div className="p-4 text-red-500">404 - Page Not Found</div>} />
           </Routes>
         </main>
