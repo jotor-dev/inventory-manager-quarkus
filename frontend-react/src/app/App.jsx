@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import ProductList from '../features/products/ProductList';
+import RawMaterialList from '../features/rawMaterial/RawMaterialList';
 
 // Componentes simplões como você pediu
 const Header = () => (
@@ -33,7 +34,7 @@ function App() {
         <main className="container mx-auto p-6 flex-grow">
           <Routes>
             <Route path="/" element={<ProductList />} />
-            <Route path="/materials" element={<div className="p-4">Raw Materials</div>} />
+            <Route path="/materials" element={<RawMaterialList />} />
             <Route path="/suggestion" element={<div className="p-4">Suggestions</div>} />
             <Route path="*" element={<div className="p-4 text-red-500">404 - Page Not Found</div>} />
           </Routes>

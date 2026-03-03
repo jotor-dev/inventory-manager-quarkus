@@ -13,8 +13,8 @@ const ProductList = () => {
         }
     }, [status, dispatch]);
 
-    if (status === 'loading') return <p className="text-gray-500">Invocando dados do abismo...</p>;
-    if (status === 'failed') return <p className="text-red-500">Erro na profecia: {error}</p>;
+    if (status === 'loading') return <p className="text-gray-500">Loading products...</p>;
+    if (status === 'failed') return <p className="text-red-500">Error when fetching products: {error}</p>;
 
     return <ProductTable list={products} />;
 };
