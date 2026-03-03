@@ -1,4 +1,5 @@
-function RawMaterialTable({ list }) {
+function SuggestionTable({ list }) {
+  if (!list || list.length === 0) return null;
   return (
     <div className="p-4 overflow-x-auto">
       <h2 className="text-2xl font-bold mb-4 text-gray-800 border-b pb-2">Suggestions</h2>
@@ -25,4 +26,4 @@ function RawMaterialTable({ list }) {
   );
 }
 
-export default RawMaterialTable
+export default SuggestionTable
