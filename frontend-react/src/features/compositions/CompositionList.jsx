@@ -1,51 +1,38 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchProducts } from './productSlice';
-import { fetchRawMaterials } from '../rawMaterials/rawMaterialSlice';
-import { fetchProductCompositions } from '../compositions/compositionSlice';
+import { fetchProducts } from './compositionSlice';
 import { Button, Container, Row, Col, Spinner, Alert } from 'react-bootstrap';
 import { PlusCircle } from 'lucide-react';
 import ProductTable from '../../components/ProductTable';
 import ProductModal from '../../components/ProductModal';
-import CompositionModal from '../../components/CompositionModal';
 
 const ProductList = () => {
     const dispatch = useDispatch();
-
+    
     const { list: products, status, error } = useSelector(state => state.products);
-    const { list: rawMaterials } = useSelector(state => state.rawMaterials);
 
     const [showProductModal, setShowProductModal] = useState(false);
     const [productToEdit, setProductToEdit] = useState(null);
-    const [showCompModal, setShowCompModal] = useState(false);
-    const [selectedProduct, setSelectedProduct] = useState(null);
 
     useEffect(() => {
         if (status === 'idle') {
             dispatch(fetchProducts());
-            dispatch(fetchRawMaterials());
         }
     }, [status, dispatch]);
 
     const openCreateModal = () => {
-        setProductToEdit(null);
+        setProductToEdit(null); 
         setShowProductModal(true);
     };
 
     const openEditModal = (product) => {
-        setProductToEdit(product);
+        setProductToEdit(product); 
         setShowProductModal(true);
     };
 
     const handleCloseModal = () => {
         setShowProductModal(false);
         setProductToEdit(null);
-    };
-
-    const handleOpenComposition = (product) => {
-        setSelectedProduct(product);
-        setShowCompModal(true);
-        dispatch(fetchProductCompositions(product.id));
     };
 
     if (status === 'loading') {
@@ -79,23 +66,15 @@ const ProductList = () => {
                 </Col>
             </Row>
 
-            <ProductTable
-                list={products}
-                onEdit={openEditModal}
-                onManageComposition={handleOpenComposition}
+            <ProductTable 
+                list={products} 
+                onEdit={openEditModal} 
             />
 
-            <ProductModal
-                show={showProductModal}
+            <ProductModal 
+                show={showProductModal} 
                 handleClose={handleCloseModal}
                 productToEdit={productToEdit}
-            />
-
-            <CompositionModal 
-                show={showCompModal} 
-                handleClose={() => setShowCompModal(false)}
-                product={selectedProduct}
-                rawMaterials={rawMaterials}
             />
         </Container>
     );

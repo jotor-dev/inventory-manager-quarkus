@@ -1,39 +1,61 @@
+import { useState } from 'react';
 import { Modal, Button, Form, Table } from 'react-bootstrap';
-import { Plus, X } from 'lucide-react';
+import { Plus, Trash2 } from 'lucide-react';
+import { useDispatch, useSelector } from 'react-redux';
+import { addMaterialToProduct, removeMaterialFromProduct } from '../features/compositions/compositionSlice';
 
 function CompositionModal({ show, handleClose, product, rawMaterials }) {
+  const dispatch = useDispatch();
+  const { currentProductCompositions } = useSelector(state => state.compositions);
+  
+  const [selectedMaterial, setSelectedMaterial] = useState('');
+  const [quantity, setQuantity] = useState('');
+
+  const handleAdd = () => {
+    if (!selectedMaterial || !quantity) return;
+    
+    dispatch(addMaterialToProduct({
+      productId: product.id,
+      rawMaterialId: parseInt(selectedMaterial),
+      requiredQuantity: parseFloat(quantity)
+    }));
+    
+    setSelectedMaterial('');
+    setQuantity('');
+  };
+
   return (
     <Modal show={show} onHide={handleClose} size="lg" centered>
-      <Modal.Header closeButton>
-        <Modal.Title>Recipe for {product?.name}</Modal.Title>
+      <Modal.Header closeButton className="bg-light">
+        <Modal.Title className="fs-5">Recipe for: <span className="text-primary">{product?.name}</span></Modal.Title>
       </Modal.Header>
       
       <Modal.Body>
-        <Form className="row g-3 mb-4">
+        <Form className="row g-2 mb-4 align-items-end">
           <Form.Group className="col-md-6">
-            <Form.Label>Raw Material</Form.Label>
-            <Form.Select>
-              <option>Select material...</option>
-              {rawMaterials.map(mat => (
-                <option key={mat.id} value={mat.id}>{mat.name}</option>
+            <Form.Label className="small fw-bold">Raw Material</Form.Label>
+            <Form.Select value={selectedMaterial} onChange={e => setSelectedMaterial(e.target.value)}>
+              <option value="">Select material...</option>
+              {rawMaterials && rawMaterials.map(mat => (
+                <option key={mat.id} value={mat.id}>{mat.name} (Stock: {mat.stockQuantity})</option>
               ))}
             </Form.Select>
           </Form.Group>
 
           <Form.Group className="col-md-4">
-            <Form.Label>Quantity</Form.Label>
-            <Form.Control type="number" placeholder="0.00" />
+            <Form.Label className="small fw-bold">Quantity Needed</Form.Label>
+            <Form.Control type="number" value={quantity} onChange={e => setQuantity(e.target.value)} placeholder="0.00" />
           </Form.Group>
 
-          <div className="col-md-2 d-flex align-items-end">
-            <Button variant="primary" className="w-100">
+          <div className="col-md-2">
+            <Button variant="primary" onClick={handleAdd}>
               <Plus size={18} />
             </Button>
           </div>
         </Form>
 
-        <Table striped bordered hover size="sm">
-          <thead>
+        <Table hover responsive size="sm" className="border">
+          <thead className="table-light">
             <tr>
               <th>Material</th>
               <th>Quantity</th>
@@ -41,21 +63,28 @@ function CompositionModal({ show, handleClose, product, rawMaterials }) {
             </tr>
           </thead>
           <tbody>
-
-            <tr>
-              <td>Steel</td>
-              <td>10.0</td>
-              <td className="text-center">
-                <Button variant="outline-danger" size="sm"><X size={14} /></Button>
-              </td>
-            </tr>
+            {currentProductCompositions.map((comp) => (
+              <tr key={comp.id} className="align-middle">
+                <td className="fw-bold">{comp.rawMaterialName}</td>
+                <td>{comp.requiredQuantity}</td>
+                <td className="text-center">
+                  <Button 
+                    variant="outline-danger" 
+                    size="sm"
+                    onClick={() => {
+                      if (window.confirm(`Exterminate material from product ${product.name}?`)) {
+                        dispatch(removeMaterialFromProduct({ id: comp.id, productId: product.id }));
+                      }
+                    }}
+                  >
+                    <Trash2 size={14} />
+                  </Button>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </Table>
       </Modal.Body>
-
-      <Modal.Footer>
-        <Button variant="secondary" onClick={handleClose}>Close</Button>
-      </Modal.Footer>
     </Modal>
   );
 }

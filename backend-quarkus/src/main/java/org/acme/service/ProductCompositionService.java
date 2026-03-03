@@ -1,18 +1,14 @@
 package org.acme.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import org.acme.dto.ProductCompositionRequestDTO;
 import org.acme.dto.ProductCompositionResponseDTO;
-import org.acme.dto.ProductResponseDTO;
-import org.acme.dto.RawMaterialResponseDTO;
 import org.acme.model.Product;
 import org.acme.model.ProductComposition;
 import org.acme.model.RawMaterial;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class ProductCompositionService {
@@ -20,7 +16,15 @@ public class ProductCompositionService {
     public List<ProductCompositionResponseDTO> listAll() {
         return ProductComposition.listAll().stream()
                 .map(entity -> ProductCompositionResponseDTO.fromEntity((ProductComposition) entity))
-                .collect(Collectors.toList());
+                .toList();
+    }
+
+    public List<ProductCompositionResponseDTO> findByProductId(Long productId) {
+        List<ProductComposition> entities = ProductComposition.list("product.id", productId);
+
+        return entities.stream()
+                .map(ProductCompositionResponseDTO::fromEntity)
+                .toList();
     }
 
     public ProductCompositionResponseDTO findById(Long id){
@@ -35,11 +39,21 @@ public class ProductCompositionService {
     @Transactional
     public boolean create(ProductCompositionRequestDTO dto){
         try{
-            Product product = Product.findById(dto.productID());
+            Product product = Product.findById(dto.productId());
             RawMaterial rawMaterial = RawMaterial.findById(dto.rawMaterialId());
 
             if(product == null || rawMaterial == null) {
                 return false;
+            }
+
+            ProductComposition existing = ProductComposition.find(
+                    "product.id = ?1 and rawMaterial.id = ?2",
+                    dto.productId(), dto.rawMaterialId()
+            ).firstResult();
+
+            if (existing != null) {
+                existing.requiredQuantity += dto.requiredQuantity();
+                return true;
             }
 
             ProductComposition composition = new ProductComposition();
@@ -57,7 +71,7 @@ public class ProductCompositionService {
     @Transactional
     public boolean update(Long id, ProductCompositionRequestDTO updatedProduct){
         ProductComposition result = ProductComposition.findById(id);
-        Product product = Product.findById(updatedProduct.productID());
+        Product product = Product.findById(updatedProduct.productId());
         RawMaterial rawMaterial = RawMaterial.findById(updatedProduct.rawMaterialId());
 
         if(result == null || product == null || rawMaterial == null){

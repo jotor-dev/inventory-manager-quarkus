@@ -35,6 +35,13 @@ public class ProductCompositionController {
         return Response.ok(product).build();
     }
 
+    @GET
+    @Path("/product/{productId}")
+    public Response findByProductId(@PathParam("productId") Long productId){
+        List<ProductCompositionResponseDTO> compositions = productService.findByProductId(productId);
+        return Response.ok(compositions).build();
+    }
+
     @POST
     public Response create(ProductCompositionRequestDTO dto){
         boolean isCreated = productService.create(dto);
