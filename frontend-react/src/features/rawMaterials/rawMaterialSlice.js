@@ -9,6 +9,30 @@ export const fetchRawMaterials = createAsyncThunk(
     }
 );
 
+export const createRawMaterial = createAsyncThunk(
+    'rawMaterials/createRawMaterial',
+    async (rawMaterialData, { dispatch }) => {
+        await api.post('/raw-material', rawMaterialData);
+        dispatch(fetchRawMaterials());
+    }
+)
+
+export const updateRawMaterial = createAsyncThunk(
+    'rawMaterials/updateRawMaterial',
+    async (rawMaterialData, { dispatch }) => {
+        await api.put(`/raw-material/${rawMaterialData.id}`, rawMaterialData);
+        dispatch(fetchRawMaterials()); 
+    }
+);
+
+export const deleteRawMaterial = createAsyncThunk(
+    'rawMaterials/deleteRawMaterial',
+    async (rawMaterialId, { dispatch }) => {
+        await api.delete(`/raw-material/${rawMaterialId}`);
+        dispatch(fetchRawMaterials());
+    }
+)
+
 const rawMaterialSlice = createSlice({
     name: 'rawMaterials',
     initialState: {
@@ -28,7 +52,43 @@ const rawMaterialSlice = createSlice({
             .addCase(fetchRawMaterials.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.error.message;
-            });
+            })
+
+            // Create
+            .addCase(createRawMaterial.fulfilled, (state) => {
+                state.status = 'succeeded';
+            })
+            .addCase(createRawMaterial.pending, (state) => {
+                state.status = 'saving'; 
+            })
+            .addCase(createRawMaterial.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message;
+            })
+            
+            // Update
+            .addCase(updateRawMaterial.fulfilled, (state) => {
+                state.status = 'succeeded';
+            })
+            .addCase(updateRawMaterial.pending, (state) => {
+                state.status = 'updating'; 
+            })
+            .addCase(updateRawMaterial.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message;
+            })
+
+            // Delete
+            .addCase(deleteRawMaterial.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+            })
+            .addCase(deleteRawMaterial.pending, (state) => {
+                state.status = 'deleting'; 
+            })
+            .addCase(deleteRawMaterial.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message;
+            })
     }
 });
 
