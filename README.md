@@ -43,6 +43,7 @@ The entire environment is orchestrated via Docker. No manual database or server 
    ```bash
    git clone [https://github.com/jotor-dev/inventory-manager.git](https://github.com/jotor-dev/inventory-manager.git)
    cd inventory-manager
+   ```
 2. **Build the artifacts:**
   ```bash
     cd backend-quarkus
@@ -58,7 +59,18 @@ docker-compose up --build
 * **Backend (API):** http://localhost:8080
 * **Database (Oracle):** `localhost:1521` (User: `system` / Pass: `123`)
 
-## 5. 📝 Notes
+## 5. 🧪 Testing Suite (Desirable Requirement)
+### Backend Testing (Quarkus)
+- **Unit & Integration Tests:** Powered by **JUnit 5** and **RestAssured**.
+- **Mocking Strategy:** Utilizes `io.quarkus.test.InjectMock` to simulate various inventory scenarios.
+
+**To run the backend tests:**
+```bash
+cd backend-quarkus
+./mvnw test
+```
+
+## 6. 📝 Notes
 
 * **Persistence:** Docker volumes are used (`oracle_data`).
 * **CORS:** Configured to allow communication between the Nginx container (port 80) and the Quarkus API (port 8080).
