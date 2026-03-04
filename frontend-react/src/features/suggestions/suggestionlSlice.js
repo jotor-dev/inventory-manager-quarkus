@@ -9,6 +9,16 @@ export const fetchSuggestions = createAsyncThunk(
     }
 );
 
+export const produceProduct = createAsyncThunk(
+    'suggestions/produce',
+    async (productId, { dispatch }) => {
+        await api.post(`/product-composition/produce/${productId}`);
+        
+        dispatch(fetchSuggestions());
+        dispatch(fetchRawMaterials()); 
+    }
+);
+
 const suggestionSlice = createSlice({
     name: 'suggestions',
     initialState: {

@@ -7,6 +7,7 @@ import jakarta.ws.rs.core.Response;
 import org.acme.dto.ProductCompositionResponseDTO;
 import org.acme.dto.ProductCompositionRequestDTO;
 import org.acme.service.ProductCompositionService;
+import org.acme.service.SuggestionService;
 
 import java.util.List;
 
@@ -16,6 +17,7 @@ import java.util.List;
 public class ProductCompositionController {
     @Inject
     ProductCompositionService productService;
+    SuggestionService suggestionService;
 
     @GET
     public Response listAll(){
@@ -40,6 +42,17 @@ public class ProductCompositionController {
     public Response findByProductId(@PathParam("productId") Long productId){
         List<ProductCompositionResponseDTO> compositions = productService.findByProductId(productId);
         return Response.ok(compositions).build();
+    }
+
+    @POST
+    @Path("/produce/{id}")
+    public Response produceProduct(@PathParam("id") Long productId) {
+        try {
+            suggestionService.executeProduction(productId, 1);
+            return Response.ok().build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+        }
     }
 
     @POST
