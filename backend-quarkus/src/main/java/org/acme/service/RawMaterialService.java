@@ -58,6 +58,11 @@ public class RawMaterialService {
 
     @Transactional
     public boolean delete(Long id){
-        return RawMaterial.deleteById(id);
+        RawMaterial rawMaterial = RawMaterial.findById(id);
+        if (rawMaterial != null) {
+            rawMaterial.delete();
+            return true;
+        }
+        return false;
     }
 }

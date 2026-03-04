@@ -35,7 +35,7 @@ public class RawMaterialControllerTest {
 
     @Test
     public void shouldCreateRawMaterialSuccesfully(){
-        RawMaterialRequestDTO dto = new RawMaterialRequestDTO("COD-001", "Produto de teste", 150.50);
+        RawMaterialRequestDTO dto = new RawMaterialRequestDTO("COD-001", "Raw Material Test", 150.50);
 
         Mockito.when(rawMaterialService.create(any(RawMaterialRequestDTO.class))).thenReturn(true);
 
@@ -49,7 +49,7 @@ public class RawMaterialControllerTest {
 
     @Test
     public void shouldReturnBadRequestWhenCreationFails(){
-        RawMaterialRequestDTO dto = new RawMaterialRequestDTO("COD-002", "Pó de Estrela", 0.0);
+        RawMaterialRequestDTO dto = new RawMaterialRequestDTO("COD-002", "Raw Material Test", 0.0);
 
         Mockito.when(rawMaterialService.create(any(RawMaterialRequestDTO.class))).thenReturn(false);
 
@@ -77,7 +77,7 @@ public class RawMaterialControllerTest {
     @Test
     public void shouldReturnRawMaterialWhenItExists() {
         Long realId = 1L;
-        RawMaterialResponseDTO expectedDto = new RawMaterialResponseDTO(realId, "COD-001", "Engrenagem do Tempo", 150.50);
+        RawMaterialResponseDTO expectedDto = new RawMaterialResponseDTO(realId, "COD-001", "Raw Material Test", 150.50);
 
         Mockito.when(rawMaterialService.findById(realId)).thenReturn(expectedDto);
 
@@ -87,13 +87,13 @@ public class RawMaterialControllerTest {
                 .then()
                 .statusCode(200)
                 .body("code", is("COD-001"))
-                .body("name", is("Engrenagem do Tempo"));
+                .body("name", is("Raw Material Test"));
     }
 
     @Test
     public void shouldUpdateRawMaterialSuccessfully() {
         Long realId = 1L;
-        RawMaterialRequestDTO dto = new RawMaterialRequestDTO("COD-001", "Engrenagem Forjada no Fogo", 200.00);
+        RawMaterialRequestDTO dto = new RawMaterialRequestDTO("COD-001", "Raw Material Test", 200.00);
 
         Mockito.when(rawMaterialService.update(eq(realId), any(RawMaterialRequestDTO.class))).thenReturn(true);
 
@@ -109,7 +109,7 @@ public class RawMaterialControllerTest {
     @Test
     public void shouldReturnNotFoundWhenUpdatingPhantom() {
         Long phantomId = 999L;
-        RawMaterialRequestDTO dto = new RawMaterialRequestDTO("COD-001", "Pó de Ilusão", 10.0);
+        RawMaterialRequestDTO dto = new RawMaterialRequestDTO("COD-001", "Raw Material Test", 10.0);
 
         Mockito.when(rawMaterialService.update(eq(phantomId), any(RawMaterialRequestDTO.class))).thenReturn(false);
 

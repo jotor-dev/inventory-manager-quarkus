@@ -34,7 +34,7 @@ public class ProductControllerTest {
 
     @Test
     public void shouldCreateProductSuccesfully(){
-        ProductRequestDTO dto = new ProductRequestDTO("COD-001", "Produto de teste", 150.50);
+        ProductRequestDTO dto = new ProductRequestDTO("COD-001", "Test Product", 150.50);
 
         Mockito.when(productService.create(any(ProductRequestDTO.class))).thenReturn(true);
 
@@ -48,7 +48,7 @@ public class ProductControllerTest {
 
     @Test
     public void shouldReturnBadRequestWhenCreationFails(){
-        ProductRequestDTO dto = new ProductRequestDTO("COD-002", "Pó de Estrela", 0.0);
+        ProductRequestDTO dto = new ProductRequestDTO("COD-002", "Test Product", 0.0);
 
         Mockito.when(productService.create(any(ProductRequestDTO.class))).thenReturn(false);
 
@@ -76,7 +76,7 @@ public class ProductControllerTest {
     @Test
     public void shouldReturnProductWhenItExists() {
         Long realId = 1L;
-        ProductResponseDTO expectedDto = new ProductResponseDTO(realId, "COD-001", "Engrenagem do Tempo", 150.50);
+        ProductResponseDTO expectedDto = new ProductResponseDTO(realId, "COD-001", "Test Product", 150.50);
 
         Mockito.when(productService.findById(realId)).thenReturn(expectedDto);
 
@@ -86,13 +86,13 @@ public class ProductControllerTest {
                 .then()
                 .statusCode(200)
                 .body("code", is("COD-001"))
-                .body("name", is("Engrenagem do Tempo"));
+                .body("name", is("Test Product"));
     }
 
     @Test
     public void shouldUpdateProductSuccessfully() {
         Long realId = 1L;
-        ProductRequestDTO dto = new ProductRequestDTO("COD-001", "Engrenagem Forjada no Fogo", 200.00);
+        ProductRequestDTO dto = new ProductRequestDTO("COD-001", "Test Product", 200.00);
 
         Mockito.when(productService.update(eq(realId), any(ProductRequestDTO.class))).thenReturn(true);
 
@@ -108,7 +108,7 @@ public class ProductControllerTest {
     @Test
     public void shouldReturnNotFoundWhenUpdatingPhantom() {
         Long phantomId = 999L;
-        ProductRequestDTO dto = new ProductRequestDTO("COD-001", "Pó de Ilusão", 10.0);
+        ProductRequestDTO dto = new ProductRequestDTO("COD-001", "Test Product", 10.0);
 
         Mockito.when(productService.update(eq(phantomId), any(ProductRequestDTO.class))).thenReturn(false);
 
@@ -144,7 +144,7 @@ public class ProductControllerTest {
                 .pathParam("id", phantomId)
                 .when().delete("/product/{id}")
                 .then()
-                .statusCode(404); // 404 NOT FOUND
+                .statusCode(404);
     }
 
 }

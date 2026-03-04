@@ -21,19 +21,17 @@ public class SuggestionControllerTest {
 
     @Test
     public void shouldReturnProductionSuggestion() {
-        // 1. Criamos a ilusão de um plano de produção bem-sucedido
-        ProductionItemDTO item = new ProductionItemDTO("Engrenagem de Ouro", 10, 1500.0);
+        ProductionItemDTO item = new ProductionItemDTO(1L, "V8 Engine", 10, 2500.0, 25000.0);
         SuggestionResponseDTO mockResponse = new SuggestionResponseDTO(List.of(item), 1500.0);
 
         Mockito.when(suggestionService.calculateProduction()).thenReturn(mockResponse);
 
-        // 2. O RestAssured interroga o portal
         given()
                 .when().get("/suggestion")
                 .then()
                 .statusCode(200)
-                .body("totalValue", is(1500.0F)) // Verifica o valor total da fortuna
-                .body("items.size()", is(1))    // Verifica se há um item na lista
-                .body("items[0].name", is("Engrenagem de Ouro"));
+                .body("totalValue", is(1500.0F))
+                .body("items.size()", is(1))
+                .body("items[0].name", is("V8 Engine"));
     }
 }

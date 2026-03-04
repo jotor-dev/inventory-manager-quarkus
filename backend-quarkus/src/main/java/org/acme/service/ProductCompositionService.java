@@ -87,6 +87,11 @@ public class ProductCompositionService {
 
     @Transactional
     public boolean delete(Long id){
-        return ProductComposition.deleteById(id);
+        ProductComposition composition = ProductComposition.findById(id);
+        if (composition != null) {
+            composition.delete();
+            return true;
+        }
+        return false;
     }
 }

@@ -58,6 +58,11 @@ public class ProductService {
 
     @Transactional
     public boolean delete(Long id){
-        return Product.deleteById(id);
+        Product product = Product.findById(id);
+        if (product != null) {
+            product.delete();
+            return true;
+        }
+        return false;
     }
 }

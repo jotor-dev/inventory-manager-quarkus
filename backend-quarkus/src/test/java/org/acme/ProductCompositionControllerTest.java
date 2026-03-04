@@ -79,7 +79,7 @@ public class ProductCompositionControllerTest {
     public void shouldReturnCompositionWhenItExists() {
         Long realId = 1L;
 
-        ProductCompositionResponseDTO response = new ProductCompositionResponseDTO(realId, 150.0, 1L, 2L);
+        ProductCompositionResponseDTO response = new ProductCompositionResponseDTO(realId, 150.0, 1L, 2L, "Steel");
 
         Mockito.when(productCompositionService.findById(realId)).thenReturn(response);
 
