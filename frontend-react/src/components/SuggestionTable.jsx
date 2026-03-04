@@ -5,7 +5,14 @@ import { produceProduct } from '../features/suggestions/suggestionlSlice';
 
 function SuggestionTable({ list }) {
   const dispatch = useDispatch();
-  if (!list || list.length === 0) return null;
+
+  if (!list || list.length === 0) {
+    return (
+      <div className="text-center text-muted p-5 border rounded bg-light shadow-sm">
+        <p className="m-0 fs-5 italic">No ancient artifacts (suggestions) found in the vault.</p>
+      </div>
+    );
+  }
 
   const handleProduce = (suggestion) => {
     Swal.fire({
@@ -47,7 +54,7 @@ function SuggestionTable({ list }) {
         </thead>
         <tbody>
           {list.items.map((suggestion) => (
-            <tr key={suggestion.id} className="border-t border-gray-200 hover:bg-gray-50 transition-colors">
+            <tr key={suggestion.productId} className="border-t border-gray-200 hover:bg-gray-50 transition-colors">
               <td className="px-4 py-2 font-mono text-sm">{suggestion.name}</td>
               <td className="px-4 py-2">{suggestion.quantityCanProduce}</td>
               <td className="px-4 py-2 text-green-700">{suggestion.subtotalValue}</td>

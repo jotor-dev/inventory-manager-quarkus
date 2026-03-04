@@ -1,7 +1,7 @@
 import { useDispatch } from 'react-redux';
 import { Pencil, Trash2, Beaker } from 'lucide-react';
 import { Button, Table } from 'react-bootstrap';
-import Swal from 'sweetalert2'; // O guardião da experiência do usuário
+import Swal from 'sweetalert2'; 
 import { deleteProduct } from '../features/products/productSlice';
 
 function ProductTable({ list, onEdit, onManageComposition }) {
@@ -43,7 +43,7 @@ function ProductTable({ list, onEdit, onManageComposition }) {
 
   return (
     <div className="bg-white rounded shadow-sm border overflow-hidden mt-3">
-      <Table hover responsive className="mb-0 align-middle">
+      <Table hover responsive="md" className="mb-0 align-middle">
         <thead className="bg-light text-secondary border-bottom">
           <tr>
             <th className="px-4 py-3 border-0">Code</th>
